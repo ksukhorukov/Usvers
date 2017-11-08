@@ -1,7 +1,22 @@
 <% provide(:title, @user.name) %>
 <div class="row">
-  <br><br><br><br>
-      <h3>Name: <%= @user.name %></h3>
-      <h3>Email: <%= @user.email %></h3>
-      <img src='<%= @user.avatar.url %>' class='avatar'>  
+  <div class="info">
+    <table border="0" >
+      <tr>
+        <td rowspan="3" width="120px">
+          <img src='<%= @user.avatar.url %>' class='avatar'>  
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3>Name: <%= @user.name %></h3>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h3>Email: <%= @user.email %></h3>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>
