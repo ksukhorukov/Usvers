@@ -18,11 +18,25 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      sign_in @user
-      flash[:success] = "Welcome to the Sample App!"
-      redirect_to @user
+      respond_to do |format|
+        format.html { 
+          sign_in @user
+          flash[:success] = "Welcome to the Usvers!"
+          redirect_to @user
+        }
+        format.json {
+          render json: { status: 'ok', message: 'user created' }.to_json
+        }
+      end
     else
-      render 'new'
+      respond_to do |format| 
+        format.html {
+          render 'new'
+        }
+        format.json {
+          render json: { status: 'error', message: @user.errors }.to_json
+        }
+      end
     end
   end
 
