@@ -41,7 +41,7 @@ class UsersController < ApplicationController
           redirect_to @user
         }
         format.json {
-          render json: { status: 'ok', message: 'user created' }
+          render json: @user
         }
       end
     else

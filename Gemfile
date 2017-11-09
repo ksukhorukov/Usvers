@@ -31,6 +31,7 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'active_model_serializers', '~> 0.10.0'
 gem 'carrierwave', '~> 1.0'
 gem 'bootstrap-sass'
 gem 'bcrypt'
