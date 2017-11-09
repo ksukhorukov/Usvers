@@ -15,9 +15,12 @@ module SessionsHelper
     @current_user = user
   end
 
+  def remember_token_stored
+    request.headers["Authentication"] || User.encrypt(cookies[:remember_token]) 
+  end
+
   def current_user
-    remember_token = User.encrypt(cookies[:remember_token])
-    @current_user ||= User.find_by_remember_token(remember_token)
+    @current_user ||= User.find_by_remember_token(remember_token_stored)
   end
 
   def current_user?(user)
@@ -26,14 +29,26 @@ module SessionsHelper
 
   def signed_in_user
     unless signed_in?
-      store_location
-      redirect_to signin_url
+      respond_to do |format|
+        format.html {
+          store_location
+          redirect_to signin_url         
+        }
+        format.json {
+          render json: { status: 'error', message: 'Not authorized' }
+        }
+      end
     end
   end
 
   def sign_out
     current_user = nil
     cookies.delete(:remember_token)
+    user = User.find_by_remember_token(remember_token) 
+    if user 
+      remember_token = User.new_remember_token
+      user.update_attribute(:remember_token, remember_token)
+    end
   end
 
   def redirect_back_or(default)

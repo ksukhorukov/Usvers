@@ -1,14 +1,30 @@
 class UsersController < ApplicationController
   before_action :signed_in_user,
-                only: [:index, :edit, :update, :destroy, :following, :followers]
+                only: [:index, :edit, :update]
   before_action :correct_user,   only: [:edit, :update]
 
   def index
     @users = User.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {
+        render 'index'
+      }
+      format.json {
+        render json: @users
+      }
+    end
   end
 
   def show
     @user = User.find(params[:id])
+    respond_to do |format|
+      format.html {
+        render 'show'
+      }
+      format.json {
+        render json: @user 
+      }
+    end
   end
 
   def new
@@ -45,11 +61,25 @@ class UsersController < ApplicationController
 
   def update
     if @user.update_attributes(user_params)
-      flash[:success] = "Profile updated"
-      sign_in @user
-      redirect_to @user
+      respond_to do |format|
+        format.html {
+          flash[:success] = "Profile updated"
+          sign_in @user
+          redirect_to @user          
+        }
+        format.json {
+          render json: @user
+        }
+      end
     else
-      render 'edit'
+      respond_to do |format| 
+        format.html {
+          render 'edit'
+        }
+        format.json {
+          render json: { status: 'error', message: @user.errors }
+        }
+      end
     end
   end
 
@@ -62,7 +92,16 @@ class UsersController < ApplicationController
 
     def correct_user
       @user = User.find(params[:id])
-      redirect_to(root_url) unless current_user?(@user)
+      unless current_user?(@user) 
+        respond_to do |format|
+          format.html {
+            redirect_to(root_url)
+          }
+          format.json {
+            render json: { status: 'error', message: 'Anauthroized request' }
+          }
+        end
+      end
     end
 
 end
