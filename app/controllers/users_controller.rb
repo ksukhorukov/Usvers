@@ -25,7 +25,7 @@ class UsersController < ApplicationController
           redirect_to @user
         }
         format.json {
-          render json: { status: 'ok', message: 'user created' }.to_json
+          render json: { status: 'ok', message: 'user created' }
         }
       end
     else
@@ -34,7 +34,7 @@ class UsersController < ApplicationController
           render 'new'
         }
         format.json {
-          render json: { status: 'error', message: @user.errors }.to_json
+          render json: { status: 'error', message: @user.errors }
         }
       end
     end
