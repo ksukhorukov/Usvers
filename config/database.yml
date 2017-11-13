@@ -13,4 +13,6 @@ test:
 
 production:
   <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+  password: <%= ENV['USVERS_DATABASE_PASSWORD'] %>
   database: usvers
